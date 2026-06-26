@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚙️ Admin R16 — Real Coholicos 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d1117;--surface:#161b22;--surface2:#21262d;--border:#30363d;--green:#238636;--green-light:#2ea043;--green-glow:rgba(35,134,54,0.2);--gold:#e3b341;--gold-dim:#533d1a;--text:#e6edf3;--muted:#8b949e;--subtle:#484f58;--red:#da3633;--red-dim:#3d1f1e;--blue:#58a6ff;--radius:8px;--radius-lg:12px;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.hdr{background:linear-gradient(135deg,#0d1117,#1a2332);border-bottom:1px solid var(--border);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.hdr-logo{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px;background:linear-gradient(90deg,var(--gold),#f5d47a);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hdr-badge{background:var(--red);color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;letter-spacing:1px}
+.sheets-status{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--subtle)}
+.dot.ok{background:var(--green-light);box-shadow:0 0 6px var(--green)}
+.tabs{display:flex;background:var(--surface);border-bottom:1px solid var(--border);padding:0 1rem;gap:4px;overflow-x:auto}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:12px 16px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;font-family:'Outfit',sans-serif;transition:all 0.2s}
+.tab.active{color:var(--text);border-bottom-color:var(--gold)}
+.content{max-width:760px;margin:0 auto;padding:1.25rem 1rem}
+.panel{display:none}.panel.active{display:block}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:1rem}
+.card-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:1rem;display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:0.5px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+label{font-size:11px;font-weight:600;color:var(--muted);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:0.5px}
+input,select{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;font-family:'Outfit',sans-serif;background:var(--surface2);color:var(--text);outline:none;transition:border 0.2s}
+input:focus,select:focus{border-color:var(--green-light)}
+.btn{padding:9px 18px;border-radius:var(--radius);font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:'Outfit',sans-serif;transition:all 0.15s;display:inline-flex;align-items:center;gap:6px}
+.btn-green{background:var(--green);border-color:var(--green);color:#fff}
+.btn-green:hover{background:var(--green-light)}
+.btn-gold{background:var(--gold-dim);border-color:var(--gold);color:var(--gold)}
+.btn-gold:hover{background:var(--gold);color:#000}
+.btn-red{border-color:var(--red-dim);color:var(--red)}
+.btn-sm{padding:5px 11px;font-size:12px}
+.match-row{padding:10px 0;border-bottom:1px solid var(--border)}
+.match-row:last-child{border-bottom:none}
+.match-teams{font-size:13px;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.match-vs{color:var(--subtle);font-size:11px}
+.score-wrap{display:flex;align-items:center;gap:8px}
+.score-wrap input{width:52px;text-align:center}
+.score-dash{color:var(--muted);font-weight:700}
+.rank-cards{display:flex;flex-direction:column;gap:8px}
+.rank-card{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:var(--radius-lg);border:1px solid var(--border);background:var(--surface)}
+.rank-card.gold{border-color:var(--gold);background:linear-gradient(90deg,var(--gold-dim),var(--surface))}
+.rank-card.silver{border-color:#6e7681}
+.rank-card.bronze{border-color:#7a4e2d}
+.rank-pos{font-family:'Bebas Neue',sans-serif;font-size:28px;width:32px;text-align:center;color:var(--subtle)}
+.rank-card.gold .rank-pos{color:var(--gold)}
+.rank-card.silver .rank-pos{color:#8b949e}
+.rank-card.bronze .rank-pos{color:#b07d4a}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--green-glow);border:1px solid var(--green);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:var(--green-light)}
+.rank-info{flex:1}
+.rank-name{font-size:14px;font-weight:600}
+.rank-detail{font-size:12px;color:var(--muted);margin-top:2px}
+.rank-pts{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--green-light)}
+.rank-card.gold .rank-pts{color:var(--gold)}
+.bar{height:4px;background:var(--border);border-radius:2px;margin-top:6px}
+.bar-fill{height:100%;border-radius:2px;background:var(--green);transition:width 0.5s}
+.rank-card.gold .bar-fill{background:var(--gold)}
+.wa-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;background:#25d366;border:none;border-radius:var(--radius);color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;text-decoration:none;transition:opacity 0.2s}
+.info-box{background:rgba(88,166,255,0.08);border:1px solid rgba(88,166,255,0.3);border-radius:var(--radius);padding:12px 14px;font-size:13px;color:var(--blue);margin-bottom:1rem;line-height:1.6}
+.empty{text-align:center;padding:2rem;color:var(--muted);font-size:14px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--surface);border:1px solid var(--green);color:var(--green-light);padding:10px 20px;border-radius:var(--radius);font-size:13px;font-weight:600;transition:transform 0.3s;z-index:999}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.phase-tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:1rem}
+.ptab{padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);border-radius:4px;background:transparent;color:var(--muted);font-family:'Outfit',sans-serif;transition:all 0.15s}
+.ptab.active{background:var(--red);border-color:var(--red);color:#fff}
+.sdiv{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1.5px;color:var(--gold);border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:12px;margin-top:16px}
+.sdiv:first-child{margin-top:0}
+.p-table{width:100%;border-collapse:collapse;font-size:13px}
+.p-table th{text-align:left;font-size:11px;font-weight:600;color:var(--muted);padding:8px;border-bottom:1px solid var(--border);text-transform:uppercase;letter-spacing:0.5px}
+.p-table td{padding:10px 8px;border-bottom:1px solid var(--border)}
+.p-table tr:last-child td{border-bottom:none}
+.status-pill{font-size:11px;padding:3px 8px;border-radius:20px;font-weight:600}
+.pill-ok{background:rgba(35,134,54,0.2);color:var(--green-light)}
+.pill-pend{background:var(--surface2);color:var(--muted)}
+.copy-row{display:flex;gap:8px}
+.copy-row input{flex:1;font-size:12px}
+@media(max-width:500px){.frow{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div style="display:flex;align-items:center;gap:10px">
+    <div class="hdr-logo">⚙️ ADMIN R16</div>
+    <span class="hdr-badge">ADMIN</span>
+  </div>
+  <div class="sheets-status"><div class="dot" id="conn-dot"></div><span id="conn-txt">Sin conectar</span></div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('config')">🔗 Configurar</button>
+  <button class="tab" onclick="showTab('participantes')">👥 Participantes</button>
+  <button class="tab" onclick="showTab('resultados')">📋 Resultados</button>
+  <button class="tab" onclick="showTab('ranking')">🏅 Ranking</button>
+  <button class="tab" onclick="showTab('compartir')">📤 Compartir</button>
+</div>
+
+<div class="content">
+
+<!-- CONFIG -->
+<div id="tab-config" class="panel active">
+  <div class="card">
+    <div class="card-title">🔗 Conectar Google Apps Script</div>
+    <div class="info-box">📌 Pega la URL de tu nuevo Google Apps Script para la polla R16. Debe terminar en <code>/exec</code></div>
+    <div style="margin-bottom:12px">
+      <label>URL de tu Web App R16</label>
+      <div class="copy-row">
+        <input type="text" id="sheets-url" placeholder="https://script.google.com/macros/s/.../exec">
+        <button class="btn btn-green" onclick="connectSheets()">✅ Conectar</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-sm" onclick="testConnection()">🔄 Probar</button>
+      <button class="btn btn-sm btn-red" onclick="clearUrl()">✕ Desconectar</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">⚙️ Configuración</div>
+    <div class="frow">
+      <div><label>Nombre de la polla</label><input type="text" id="cfg-nombre" value="Real Coholicos R16 2026"></div>
+      <div><label>Tu nombre</label><input type="text" id="cfg-admin" placeholder="José"></div>
+    </div>
+    <div class="frow">
+      <div><label>Link predicciones</label><input type="text" id="cfg-form" placeholder="https://tu-usuario.github.io/predicciones_r16.html"></div>
+      <div><label>Link ranking público</label><input type="text" id="cfg-ranking" placeholder="https://tu-usuario.github.io/ranking_r16.html"></div>
+    </div>
+    <div style="display:flex;justify-content:flex-end">
+      <button class="btn btn-green" onclick="saveCfg()">💾 Guardar</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">⭐ Sistema de puntos</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div style="background:var(--surface2);border-radius:var(--radius);padding:8px 12px;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:12px;color:var(--muted)">Resultado exacto</span>
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold)">3 pts</span>
+      </div>
+      <div style="background:var(--surface2);border-radius:var(--radius);padding:8px 12px;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:12px;color:var(--muted)">Ganador correcto</span>
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold)">1 pt</span>
+      </div>
+      <div style="background:var(--surface2);border-radius:var(--radius);padding:8px 12px;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:12px;color:var(--muted)">Campeón 🏆</span>
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold)">8 pts</span>
+      </div>
+      <div style="background:var(--surface2);border-radius:var(--radius);padding:8px 12px;display:flex;align-items:center;justify-content:space-between">
+        <span style="font-size:12px;color:var(--muted)">Goleador ⚽</span>
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold)">5 pts</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PARTICIPANTES -->
+<div id="tab-participantes" class="panel">
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px">
+      <div class="card-title" style="margin:0">👥 Participantes</div>
+      <button class="btn btn-sm" onclick="loadParticipantes()">🔄 Actualizar</button>
+    </div>
+    <div id="p-list"><div class="empty">Conecta Google Sheets para ver participantes</div></div>
+  </div>
+</div>
+
+<!-- RESULTADOS -->
+<div id="tab-resultados" class="panel">
+  <div class="card">
+    <div class="card-title">📋 Resultados reales</div>
+    <div class="info-box">💡 Ingresa los resultados del tiempo reglamentario. Si hay penales, pon el marcador de los 90 minutos.</div>
+    <div class="phase-tabs">
+      <button class="ptab active" onclick="switchPhase('R16')">Ronda 16</button>
+      <button class="ptab" onclick="switchPhase('QF')">Cuartos</button>
+      <button class="ptab" onclick="switchPhase('SF')">Semis</button>
+      <button class="ptab" onclick="switchPhase('FINAL')">Final</button>
+    </div>
+    <div class="card" id="partidos-body" style="margin-bottom:0"></div>
+  </div>
+  <div class="card" style="margin-top:0">
+    <div class="card-title">⚽ Goleador del torneo</div>
+    <div class="frow" style="margin-bottom:0">
+      <div><label>Goleador real</label><input type="text" id="goleador-real" placeholder="Ej: Kylian Mbappé" onchange="RESULTS['goleador']=this.value;saveLocal()"></div>
+      <div style="display:flex;align-items:flex-end"><div style="background:var(--gold-dim);border:1px solid var(--gold);border-radius:var(--radius);padding:9px 14px;font-size:13px;color:var(--gold);font-weight:600">⭐ 5 puntos por acertar</div></div>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:flex-end;gap:8px;margin-bottom:1rem">
+    <button class="btn btn-green" onclick="saveResultados()">💾 Guardar resultados</button>
+  </div>
+</div>
+
+<!-- RANKING -->
+<div id="tab-ranking" class="panel">
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:8px">
+      <div class="card-title" style="margin:0">🏅 Tabla de posiciones</div>
+      <button class="btn btn-gold btn-sm" onclick="calcularRanking()">🔄 Recalcular</button>
+    </div>
+    <div id="ranking-body"><div class="empty">Haz clic en "Recalcular" para ver la tabla</div></div>
+  </div>
+</div>
+
+<!-- COMPARTIR -->
+<div id="tab-compartir" class="panel">
+  <div class="card">
+    <div class="card-title">📲 Invitar a participar</div>
+    <div id="wa-invite-box" style="background:var(--surface2);border-radius:var(--radius);padding:14px;font-size:13px;line-height:1.8;margin-bottom:12px;white-space:pre-wrap;word-break:break-word"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a class="wa-btn" id="wa-invite-link" href="#" target="_blank">📲 Abrir WhatsApp</a>
+      <button class="btn" onclick="copyText('wa-invite-box')">📋 Copiar</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">🏅 Compartir ranking</div>
+    <div id="wa-ranking-box" style="background:var(--surface2);border-radius:var(--radius);padding:14px;font-size:13px;line-height:1.8;margin-bottom:12px;white-space:pre-wrap;word-break:break-word"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a class="wa-btn" id="wa-rank-link" href="#" target="_blank">📲 Enviar ranking</a>
+      <button class="btn" onclick="copyText('wa-ranking-box')">📋 Copiar</button>
+    </div>
+  </div>
+</div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const PHASES={
+  R16:{label:'Ronda de 16',matches:[
+    ['R16_1','Por definir','Por definir'],['R16_2','Por definir','Por definir'],
+    ['R16_3','Por definir','Por definir'],['R16_4','Por definir','Por definir'],
+    ['R16_5','Por definir','Por definir'],['R16_6','Por definir','Por definir'],
+    ['R16_7','Por definir','Por definir'],['R16_8','Por definir','Por definir'],
+    ['R16_9','Por definir','Por definir'],['R16_10','Por definir','Por definir'],
+    ['R16_11','Por definir','Por definir'],['R16_12','Por definir','Por definir'],
+    ['R16_13','Por definir','Por definir'],['R16_14','Por definir','Por definir'],
+    ['R16_15','Por definir','Por definir'],['R16_16','Por definir','Por definir'],
+  ]},
+  QF:{label:'Cuartos',matches:[
+    ['QF_1','Ganador R16_1','Ganador R16_2'],['QF_2','Ganador R16_3','Ganador R16_4'],
+    ['QF_3','Ganador R16_5','Ganador R16_6'],['QF_4','Ganador R16_7','Ganador R16_8'],
+    ['QF_5','Ganador R16_9','Ganador R16_10'],['QF_6','Ganador R16_11','Ganador R16_12'],
+    ['QF_7','Ganador R16_13','Ganador R16_14'],['QF_8','Ganador R16_15','Ganador R16_16'],
+  ]},
+  SF:{label:'Semis',matches:[
+    ['SF_1','Ganador QF_1','Ganador QF_2'],['SF_2','Ganador QF_3','Ganador QF_4'],
+    ['SF_3','Ganador QF_5','Ganador QF_6'],['SF_4','Ganador QF_7','Ganador QF_8'],
+  ]},
+  FINAL:{label:'Final',matches:[
+    ['TERCERO','Perdedor SF_1','Perdedor SF_2'],['FINAL','Ganador SF_1','Ganador SF_2'],
+  ]}
+};
+
+const ALL_MATCHES=Object.values(PHASES).flatMap(p=>p.matches);
+const POINTS={exact:3,winner:1,champ:8,goleador:5};
+
+let CFG={nombre:'Real Coholicos R16 2026',admin:'',formLink:'',rankingLink:'',sheetsUrl:''};
+let RESULTS={};
+let PARTICIPANTS=[];
+let PREDICTIONS={};
+
+try{const d=localStorage.getItem('adminR16');if(d){const p=JSON.parse(d);CFG=p.cfg||CFG;RESULTS=p.results||RESULTS;}}catch(e){}
+function saveLocal(){try{localStorage.setItem('adminR16',JSON.stringify({cfg:CFG,results:RESULTS}));}catch(e){}}
+
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),3000);}
+
+function showTab(id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  const tabs=['config','participantes','resultados','ranking','compartir'];
+  document.querySelectorAll('.tab')[tabs.indexOf(id)].classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+  if(id==='participantes')loadParticipantes();
+  if(id==='resultados'){switchPhase('R16');const g=document.getElementById('goleador-real');if(g&&RESULTS['goleador'])g.value=RESULTS['goleador'];}
+  if(id==='compartir')buildWAMessages();
+}
+
+function initUI(){
+  document.getElementById('sheets-url').value=CFG.sheetsUrl||'';
+  document.getElementById('cfg-nombre').value=CFG.nombre||'';
+  document.getElementById('cfg-admin').value=CFG.admin||'';
+  document.getElementById('cfg-form').value=CFG.formLink||'';
+  document.getElementById('cfg-ranking').value=CFG.rankingLink||'';
+  updateConn(!!CFG.sheetsUrl);
+}
+
+function updateConn(ok){
+  document.getElementById('conn-dot').className='dot'+(ok?' ok':'');
+  document.getElementById('conn-txt').textContent=ok?'Conectado ✅':'Sin conectar';
+}
+
+function saveCfg(){
+  CFG.nombre=document.getElementById('cfg-nombre').value;
+  CFG.admin=document.getElementById('cfg-admin').value;
+  CFG.formLink=document.getElementById('cfg-form').value;
+  CFG.rankingLink=document.getElementById('cfg-ranking').value;
+  saveLocal();toast('✅ Configuración guardada');
+}
+
+async function apiCall(action,params={}){
+  if(!CFG.sheetsUrl){toast('⚠️ Conecta primero',true);return null;}
+  try{
+    const p=new URLSearchParams({action,...params});
+    const res=await fetch(`${CFG.sheetsUrl}?${p}&t=${Date.now()}`,{method:'GET',mode:'cors'});
+    return await res.json();
+  }catch(e){return null;}
+}
+
+function connectSheets(){
+  const url=document.getElementById('sheets-url').value.trim();
+  if(!url||!url.endsWith('/exec')){toast('⚠️ La URL debe terminar en /exec');return;}
+  CFG.sheetsUrl=url;saveLocal();testConnection();
+}
+function clearUrl(){CFG.sheetsUrl='';document.getElementById('sheets-url').value='';saveLocal();updateConn(false);}
+
+async function testConnection(){
+  updateConn(false);
+  const r=await apiCall('ping');
+  if(r&&r.ok){updateConn(true);toast('✅ '+r.msg);}
+  else{updateConn(false);toast('⚠️ No se pudo conectar');}
+}
+
+async function loadParticipantes(){
+  document.getElementById('p-list').innerHTML='<div class="empty">⏳ Cargando...</div>';
+  const r=await apiCall('getParticipantes');
+  if(!r){document.getElementById('p-list').innerHTML='<div class="empty">⚠️ Error de conexión</div>';return;}
+  PARTICIPANTS=r.data||[];
+  if(!PARTICIPANTS.length){document.getElementById('p-list').innerHTML='<div class="empty">No hay participantes aún</div>';return;}
+  document.getElementById('p-list').innerHTML=`<table class="p-table">
+    <thead><tr><th></th><th>Nombre</th><th>Estado</th><th>Pts</th></tr></thead>
+    <tbody>${PARTICIPANTS.map(p=>{
+      const ini=(p.nombre||'?').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+      return`<tr>
+        <td><div class="avatar">${ini}</div></td>
+        <td style="font-weight:500">${p.nombre||'—'}</td>
+        <td><span class="status-pill ${p.predicciones?'pill-ok':'pill-pend'}">${p.predicciones?'✅ Listo':'⏳ Pendiente'}</span></td>
+        <td style="font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--green-light)">${p.pts||0}</td>
+      </tr>`;
+    }).join('')}</tbody></table>`;
+}
+
+function switchPhase(phase){
+  document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
+  event.target.classList.add('active');
+  const matches=PHASES[phase].matches;
+  document.getElementById('partidos-body').innerHTML=
+    `<div class="sdiv">${PHASES[phase].label}</div>`+
+    matches.map(m=>{
+      const k=m[0],a=m[1],b=m[2];
+      const r=RESULTS[k]||{h:'',a:'',tH:a,tA:b};
+      return`<div class="match-row">
+        <div class="match-teams">${a}<span class="match-vs">vs</span>${b}</div>
+        <div class="score-wrap">
+          <span style="font-size:11px;color:var(--muted);min-width:80px">${a.substring(0,12)}</span>
+          <input type="number" min="0" max="20" value="${r.h}" placeholder="—" onchange="setR('${k}','h',this.value,'${a}','${b}')">
+          <span class="score-dash">–</span>
+          <input type="number" min="0" max="20" value="${r.a}" placeholder="—" onchange="setR('${k}','a',this.value,'${a}','${b}')">
+          <span style="font-size:11px;color:var(--muted);min-width:80px;text-align:right">${b.substring(0,12)}</span>
+        </div>
+      </div>`;
+    }).join('');
+}
+
+function setR(k,side,v,tH,tA){
+  if(!RESULTS[k])RESULTS[k]={h:'',a:'',tH,tA};
+  RESULTS[k][side]=v;
+  RESULTS[k].tH=tH;RESULTS[k].tA=tA;
+  saveLocal();
+}
+
+async function saveResultados(){
+  saveLocal();
+  try{
+    const r=await apiCall('saveResultados',{data:encodeURIComponent(JSON.stringify(RESULTS))});
+    if(r&&r.ok)toast('✅ Resultados guardados ('+r.saved+' partidos)');
+    else toast('✅ Guardado localmente');
+  }catch(e){toast('✅ Guardado localmente');}
+}
+
+async function calcularRanking(){
+  const el=document.getElementById('ranking-body');
+  el.innerHTML='<div class="empty">⏳ Calculando...</div>';
+  try{const rp=await apiCall('getParticipantes');if(rp&&rp.data)PARTICIPANTS=rp.data;}catch(e){}
+  try{const rpred=await apiCall('getPredictions');if(rpred&&rpred.data)PREDICTIONS=rpred.data;}catch(e){}
+
+  const ranked=PARTICIPANTS.map(p=>{
+    const pred=PREDICTIONS[p.id]||null;
+    if(!pred)return{...p,pts:0,champ:''};
+    let pts=0;
+    ALL_MATCHES.forEach(m=>{
+      const k=m[0];
+      const r=RESULTS[k];const pd=pred.scores?pred.scores[k]:null;
+      if(!r||r.h===''||r.a==='')return;
+      if(!pd||pd.h===''||pd.a==='')return;
+      const rh=+r.h,ra=+r.a,ph=+pd.h,pa=+pd.a;
+      if(rh===ph&&ra===pa)pts+=POINTS.exact;
+      else{const rw=rh>ra?'h':rh<ra?'a':'d';const pw=ph>pa?'h':ph<pa?'a':'d';if(rw===pw)pts+=POINTS.winner;}
+    });
+    const finalR=RESULTS['FINAL'];
+    const champ=finalR&&finalR.h!==''&&finalR.a!==''?(+finalR.h>+finalR.a?finalR.tH:+finalR.a>+finalR.h?finalR.tA:null):null;
+    if(champ&&pred.champ===champ)pts+=POINTS.champ;
+    const gReal=(RESULTS['goleador']||'').trim().toLowerCase();
+    const gPred=(pred.goleador||'').trim().toLowerCase();
+    if(gReal&&gPred&&gReal===gPred)pts+=POINTS.goleador;
+    return{...p,pts,champ:pred.champ||''};
+  }).sort((a,b)=>b.pts-a.pts);
+
+  if(!ranked.length){el.innerHTML='<div class="empty">No hay participantes</div>';return;}
+  const max=ranked[0]?.pts||1;
+  const medals=['🥇','🥈','🥉'];
+  el.innerHTML=`<div class="rank-cards">${ranked.map((p,i)=>{
+    const ini=(p.nombre||'?').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+    const cls=i===0?'gold':i===1?'silver':i===2?'bronze':'';
+    const bw=max>0?Math.round(p.pts/max*100):0;
+    return`<div class="rank-card ${cls}">
+      <div class="rank-pos">${medals[i]||i+1}</div>
+      <div class="avatar">${ini}</div>
+      <div class="rank-info">
+        <div class="rank-name">${p.nombre||'—'}</div>
+        <div class="rank-detail">${p.champ?'🏆 '+p.champ:''}</div>
+        <div class="bar"><div class="bar-fill" style="width:${bw}%"></div></div>
+      </div>
+      <div class="rank-pts">${p.pts}</div>
+    </div>`;
+  }).join('')}</div>`;
+  try{await apiCall('saveRanking',{data:encodeURIComponent(JSON.stringify(ranked))});
+    ranked.forEach(p=>{try{apiCall('updatePuntos',{id:p.id,pts:p.pts});}catch(e){}});
+  }catch(e){}
+}
+
+function buildWAMessages(){
+  const nombre=CFG.nombre||'Real Coholicos R16 2026';
+  const admin=CFG.admin||'el administrador';
+  const formLink=CFG.formLink||'[LINK DEL FORMULARIO]';
+  const rankingLink=CFG.rankingLink||'[LINK DEL RANKING]';
+  const invite=`⚽🏆 *${nombre}*\n\n¡Nueva polla desde los 16avos!\n\n📝 *Llena tus predicciones:*\n${formLink}\n\n🏅 *Ver ranking:*\n${rankingLink}\n\n_Organizado por ${admin}_`;
+  const ranked=PARTICIPANTS.filter(p=>p.pts!==undefined).sort((a,b)=>b.pts-a.pts);
+  const medals=['🥇','🥈','🥉'];
+  let rankMsg=`⚽🏆 *${nombre}*\n*📊 Ranking actualizado*\n\n`;
+  if(ranked.length){ranked.slice(0,10).forEach((p,i)=>{rankMsg+=`${medals[i]||`${i+1}.`} *${p.nombre||'—'}* — ${p.pts||0} pts\n`;});}
+  else rankMsg+='_(Recalcula el ranking primero)_\n';
+  rankMsg+=`\n🔗 ${rankingLink}`;
+  document.getElementById('wa-invite-box').textContent=invite;
+  document.getElementById('wa-ranking-box').textContent=rankMsg;
+  document.getElementById('wa-invite-link').href='https://wa.me/?text='+encodeURIComponent(invite);
+  document.getElementById('wa-rank-link').href='https://wa.me/?text='+encodeURIComponent(rankMsg);
+}
+
+function copyText(id){navigator.clipboard.writeText(document.getElementById(id).textContent).then(()=>toast('📋 Copiado')).catch(()=>toast('Selecciona el texto manualmente'));}
+
+initUI();
+</script>
+</body>
+</html>

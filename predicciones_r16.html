@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚽ Predicciones — Real Coholicos R16 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Crimson+Pro:ital@1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#c9a84c;--gold2:#e8c97a;--gold-dim:rgba(201,168,76,0.12);
+  --red:#b01c2e;--red2:#d4283e;--red-dim:rgba(176,28,46,0.15);
+  --bg:#0a0a08;--surface:#111110;--surface2:#1a1917;--border:rgba(201,168,76,0.2);
+  --text:#f0ead8;--muted:#8a8070;--subtle:#3a3530;--radius:6px;--radius-lg:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Barlow Condensed',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;
+  background-image:radial-gradient(ellipse at 20% 0%,rgba(176,28,46,0.08) 0%,transparent 60%),
+                   radial-gradient(ellipse at 80% 100%,rgba(201,168,76,0.06) 0%,transparent 60%)}
+.hero{text-align:center;padding:2.5rem 1rem 1.5rem;position:relative}
+.hero-trophy{font-size:3rem;display:block;margin-bottom:10px;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.8rem,7vw,3.2rem);letter-spacing:4px;
+  background:linear-gradient(135deg,var(--gold),var(--gold2),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.hero-sub{font-family:'Crimson Pro',serif;font-style:italic;font-size:15px;color:var(--muted);margin-top:6px}
+.hero-line{width:100px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:14px auto}
+.hero-badge{display:inline-block;background:var(--red-dim);border:1px solid var(--red2);border-radius:20px;padding:4px 16px;font-size:12px;font-weight:700;color:var(--red2);letter-spacing:2px}
+.deadline{font-size:13px;color:var(--red2);font-weight:700;letter-spacing:1px;margin-top:8px}
+.progress-bar{position:sticky;top:0;z-index:100;background:rgba(10,10,8,0.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:10px 1rem}
+.progress-inner{max-width:680px;margin:0 auto;display:flex;align-items:center;gap:12px}
+.progress-label{font-size:11px;color:var(--muted);white-space:nowrap;letter-spacing:1px}
+.progress-track{flex:1;height:4px;background:var(--subtle);border-radius:2px}
+.progress-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--red),var(--gold));transition:width 0.4s}
+.progress-pct{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);min-width:40px;text-align:right}
+.content{max-width:680px;margin:0 auto;padding:1.5rem 1rem 5rem}
+.section{margin-bottom:2rem}
+.section-hdr{display:flex;align-items:center;gap:12px;margin-bottom:1rem;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.section-num{width:30px;height:30px;border-radius:50%;background:var(--red-dim);border:1px solid var(--red2);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--red2);flex-shrink:0}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:2px;color:var(--gold)}
+.section-sub{font-size:11px;color:var(--muted);letter-spacing:0.5px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:1rem;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:0.4}
+.field{margin-bottom:14px}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{font-size:11px;font-weight:700;color:var(--muted);display:block;margin-bottom:5px;letter-spacing:1.5px;text-transform:uppercase}
+input[type=text],input[type=tel],input[type=number]{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;font-family:'Barlow Condensed',sans-serif;background:var(--surface2);color:var(--text);outline:none;transition:all 0.2s}
+input:focus{border-color:var(--gold);background:#1e1d1a;box-shadow:0 0 0 3px rgba(201,168,76,0.08)}
+.champ-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.champ-card{background:var(--surface2);border-radius:var(--radius-lg);padding:14px;text-align:center;border:1px solid var(--border);transition:border-color 0.2s}
+.champ-card.selected{border-color:var(--gold)}
+.champ-icon{font-size:1.8rem;margin-bottom:6px;display:block}
+.champ-label{font-size:10px;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;margin-bottom:8px;display:block}
+select{width:100%;padding:9px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:'Barlow Condensed',sans-serif;background:var(--surface2);color:var(--text);outline:none}
+select:focus{border-color:var(--gold)}
+/* PHASE TABS */
+.phase-tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:1rem}
+.ptab{padding:7px 14px;font-size:13px;font-weight:700;letter-spacing:1px;cursor:pointer;border:1px solid var(--border);border-radius:4px;background:transparent;color:var(--muted);font-family:'Barlow Condensed',sans-serif;transition:all 0.15s}
+.ptab.active{background:var(--red);border-color:var(--red);color:#fff}
+.ptab.done{border-color:var(--gold);color:var(--gold)}
+/* MATCH */
+.match-item{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--subtle)}
+.match-item:last-child{border-bottom:none}
+.match-team{font-size:13px;font-weight:600;flex:1;letter-spacing:0.3px}
+.match-team.right{text-align:right}
+.score-box{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.score-box input{width:44px;text-align:center;padding:7px 4px;font-size:15px;font-family:'Bebas Neue',sans-serif}
+.score-sep{color:var(--muted);font-weight:700}
+.goleador-box{background:linear-gradient(135deg,var(--red-dim),var(--gold-dim));border:1px solid var(--gold);border-radius:var(--radius-lg);padding:1.25rem;display:flex;align-items:center;gap:14px}
+.goleador-icon{font-size:2.5rem;flex-shrink:0}
+.goleador-info{flex:1}
+.goleador-label{font-size:11px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;margin-bottom:4px}
+.goleador-pts{font-size:12px;color:var(--muted);margin-bottom:10px}
+.submit-area{position:sticky;bottom:0;background:rgba(10,10,8,0.97);backdrop-filter:blur(10px);border-top:1px solid var(--border);padding:1rem;margin:0 -1rem -5rem}
+.submit-inner{max-width:680px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.submit-info{font-size:12px;color:var(--muted)}
+.submit-info strong{color:var(--gold)}
+.btn-submit{padding:13px 28px;background:linear-gradient(135deg,var(--red),var(--red2));border:none;border-radius:var(--radius);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;transition:all 0.2s;box-shadow:0 4px 16px rgba(176,28,46,0.4)}
+.btn-submit:hover{transform:translateY(-2px)}
+.btn-submit:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.success-screen{display:none;text-align:center;padding:3rem 1rem;min-height:60vh;flex-direction:column;align-items:center;justify-content:center}
+.success-screen.show{display:flex}
+.success-icon{font-size:5rem;margin-bottom:1rem;animation:pop 0.5s cubic-bezier(0.175,0.885,0.32,1.275)}
+@keyframes pop{0%{transform:scale(0)}100%{transform:scale(1)}}
+.success-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:3px;color:var(--gold);margin-bottom:8px}
+.success-sub{font-family:'Crimson Pro',serif;font-style:italic;font-size:18px;color:var(--muted);margin-bottom:1rem}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-80px);background:var(--red);color:#fff;padding:10px 20px;border-radius:var(--radius);font-size:13px;font-weight:700;transition:transform 0.3s;z-index:999;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.alert-gold{background:var(--gold-dim);border:1px solid rgba(201,168,76,0.3);border-radius:var(--radius);padding:10px 14px;font-size:13px;color:var(--gold2);margin-bottom:1rem;line-height:1.6}
+@media(max-width:480px){.field-grid,.champ-grid{grid-template-columns:1fr}.match-team{font-size:11px}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <span class="hero-trophy">🏆</span>
+  <div class="hero-title">REAL COHOLICOS 2026</div>
+  <div class="hero-sub">Polla de Eliminatorias — Ronda de 16 en adelante</div>
+  <div class="hero-line"></div>
+  <div class="hero-badge">⚡ FASE ELIMINATORIA</div>
+  <div class="deadline" id="countdown"></div>
+</div>
+
+<div class="progress-bar">
+  <div class="progress-inner">
+    <span class="progress-label">PROGRESO</span>
+    <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+    <span class="progress-pct" id="prog-pct">0%</span>
+  </div>
+</div>
+
+<div class="content">
+  <div class="success-screen" id="success-screen">
+    <div class="success-icon">🏆</div>
+    <div class="success-title">¡Predicciones enviadas!</div>
+    <div class="success-sub">¡Que gane el mejor!</div>
+    <div id="success-name" style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--text)"></div>
+  </div>
+
+  <div id="main-form">
+    <!-- DATOS -->
+    <div class="section">
+      <div class="section-hdr">
+        <div class="section-num">1</div>
+        <div><div class="section-title">Tus datos</div><div class="section-sub">INFORMACIÓN PERSONAL</div></div>
+      </div>
+      <div class="card">
+        <div class="field-grid">
+          <div class="field"><label>Nombre completo *</label><input type="text" id="p-nombre" placeholder="Ej: José García" oninput="updateProgress()"></div>
+          <div class="field"><label>WhatsApp</label><input type="tel" id="p-wa" placeholder="+593..."></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAMPEÓN Y GOLEADOR -->
+    <div class="section">
+      <div class="section-hdr">
+        <div class="section-num">2</div>
+        <div><div class="section-title">Campeón y Goleador</div><div class="section-sub">PREDICCIONES ESPECIALES</div></div>
+      </div>
+      <div class="card">
+        <div class="champ-grid" style="margin-bottom:1rem">
+          <div class="champ-card" id="pc-champ">
+            <span class="champ-icon">🥇</span>
+            <span class="champ-label">Campeón del Mundial</span>
+            <select id="sel-champ" onchange="updateProgress();markCard('pc-champ',this.value)">
+              <option value="">— Elige —</option>
+            </select>
+          </div>
+          <div class="champ-card" style="border-color:var(--gold-dim)">
+            <span class="champ-icon">⚽</span>
+            <span class="champ-label">Goleador del torneo</span>
+            <input type="text" id="p-goleador" placeholder="Nombre del jugador" oninput="updateProgress()" style="margin-top:4px">
+            <div style="font-size:10px;color:var(--muted);margin-top:4px">⭐ Vale 5 puntos extra</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MARCADORES -->
+    <div class="section">
+      <div class="section-hdr">
+        <div class="section-num">3</div>
+        <div><div class="section-title">Marcadores</div><div class="section-sub">PREDICE CADA PARTIDO</div></div>
+      </div>
+      <div class="alert-gold">💡 Ingresa el marcador que predices. Si hay empate en 90 min y va a penales, igual pon el marcador del tiempo reglamentario.</div>
+      <div class="phase-tabs" id="phase-tabs"></div>
+      <div class="card" id="matches-body"></div>
+    </div>
+  </div>
+
+  <div class="submit-area">
+    <div class="submit-inner">
+      <div class="submit-info">Completado: <strong id="submit-pct">0%</strong></div>
+      <button class="btn-submit" id="btn-submit" onclick="submitPredictions()">⚽ ENVIAR</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+// CONFIGURACIÓN — pega tu URL de Apps Script
+const SHEETS_URL = 'PEGA_TU_URL_AQUI';
+// FECHA LÍMITE — hora Ecuador (UTC-5)
+const DEADLINE = new Date('2026-07-01T05:00:00Z'); // 30 junio 23:59 Ecuador
+// ══════════════════════════════════════════════════════════
+
+// ══════════════════════════════════════════════════════════
+// EQUIPOS — Reemplaza cuando se conozcan los clasificados
+// ══════════════════════════════════════════════════════════
+const ALL_TEAMS = [
+  'Por definir','Por definir','Por definir','Por definir',
+  'Por definir','Por definir','Por definir','Por definir',
+  'Por definir','Por definir','Por definir','Por definir',
+  'Por definir','Por definir','Por definir','Por definir',
+  'Por definir','Por definir','Por definir','Por definir',
+  'Por definir','Por definir','Por definir','Por definir',
+  'Por definir','Por definir','Por definir','Por definir',
+  'Por definir','Por definir','Por definir','Por definir',
+];
+
+const PHASES = {
+  'R16': {
+    label: 'Ronda de 16',
+    matches: [
+      ['R16_1','Por definir','Por definir'],
+      ['R16_2','Por definir','Por definir'],
+      ['R16_3','Por definir','Por definir'],
+      ['R16_4','Por definir','Por definir'],
+      ['R16_5','Por definir','Por definir'],
+      ['R16_6','Por definir','Por definir'],
+      ['R16_7','Por definir','Por definir'],
+      ['R16_8','Por definir','Por definir'],
+      ['R16_9','Por definir','Por definir'],
+      ['R16_10','Por definir','Por definir'],
+      ['R16_11','Por definir','Por definir'],
+      ['R16_12','Por definir','Por definir'],
+      ['R16_13','Por definir','Por definir'],
+      ['R16_14','Por definir','Por definir'],
+      ['R16_15','Por definir','Por definir'],
+      ['R16_16','Por definir','Por definir'],
+    ]
+  },
+  'QF': {
+    label: 'Cuartos de Final',
+    matches: [
+      ['QF_1','Ganador R16_1','Ganador R16_2'],
+      ['QF_2','Ganador R16_3','Ganador R16_4'],
+      ['QF_3','Ganador R16_5','Ganador R16_6'],
+      ['QF_4','Ganador R16_7','Ganador R16_8'],
+      ['QF_5','Ganador R16_9','Ganador R16_10'],
+      ['QF_6','Ganador R16_11','Ganador R16_12'],
+      ['QF_7','Ganador R16_13','Ganador R16_14'],
+      ['QF_8','Ganador R16_15','Ganador R16_16'],
+    ]
+  },
+  'SF': {
+    label: 'Semifinales',
+    matches: [
+      ['SF_1','Ganador QF_1','Ganador QF_2'],
+      ['SF_2','Ganador QF_3','Ganador QF_4'],
+      ['SF_3','Ganador QF_5','Ganador QF_6'],
+      ['SF_4','Ganador QF_7','Ganador QF_8'],
+    ]
+  },
+  'FINAL': {
+    label: 'Final',
+    matches: [
+      ['TERCERO','Perdedor SF_1','Perdedor SF_2'],
+      ['FINAL','Ganador SF_1','Ganador SF_2'],
+    ]
+  }
+};
+
+let scores = {};
+let activePhase = 'R16';
+
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+
+function checkDeadline(){
+  const now=new Date();
+  if(now>=DEADLINE){
+    document.getElementById('main-form').style.display='none';
+    document.querySelector('.submit-area').style.display='none';
+    document.querySelector('.progress-bar').style.display='none';
+    const s=document.getElementById('success-screen');
+    s.innerHTML='<div style="font-size:4rem;margin-bottom:1rem">⏰</div>'
+      +'<div style="font-family:Bebas Neue,sans-serif;font-size:2.5rem;letter-spacing:3px;color:#b01c2e;margin-bottom:8px">TIEMPO AGOTADO</div>'
+      +'<div style="font-size:14px;color:#c9a84c;margin-top:8px">El plazo para predicciones ha cerrado</div>';
+    s.classList.add('show');
+    return true;
+  }
+  const diff=DEADLINE-now;
+  const days=Math.floor(diff/86400000);
+  const hours=Math.floor((diff%86400000)/3600000);
+  const mins=Math.floor((diff%3600000)/60000);
+  const secs=Math.floor((diff%60000)/1000);
+  const cd=document.getElementById('countdown');
+  if(cd)cd.textContent='CIERRA EN: '+days+'d '+hours+'h '+mins+'m '+secs+'s';
+  return false;
+}
+
+function init(){
+  // Populate champ select with unique teams
+  const unique=[...new Set(Object.values(PHASES).flatMap(p=>p.matches.flatMap(m=>[m[1],m[2]]).filter(t=>!t.includes('Ganador')&&!t.includes('Perdedor'))))];
+  const teamOpts=unique.map(t=>`<option value="${t}">${t}</option>`).join('');
+  document.getElementById('sel-champ').innerHTML='<option value="">— Elige el campeón —</option>'+teamOpts;
+
+  // Phase tabs
+  const tabs=document.getElementById('phase-tabs');
+  tabs.innerHTML=Object.keys(PHASES).map(k=>`<button class="ptab${k==='R16'?' active':''}" id="ptab-${k}" onclick="switchPhase('${k}')">${PHASES[k].label}</button>`).join('');
+  renderPhase('R16');
+  if(!checkDeadline())setInterval(checkDeadline,1000);
+}
+
+function switchPhase(phase){
+  activePhase=phase;
+  document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('ptab-'+phase).classList.add('active');
+  renderPhase(phase);
+}
+
+function renderPhase(phase){
+  const matches=PHASES[phase].matches;
+  document.getElementById('matches-body').innerHTML=matches.map(m=>{
+    const k=m[0],a=m[1],b=m[2];
+    const sc=scores[k]||{h:'',a:''};
+    return`<div class="match-item">
+      <span class="match-team">${a}</span>
+      <div class="score-box">
+        <input type="number" min="0" max="20" value="${sc.h}" placeholder="—" oninput="setScore('${k}','h',this.value);updateProgress()">
+        <span class="score-sep">–</span>
+        <input type="number" min="0" max="20" value="${sc.a}" placeholder="—" oninput="setScore('${k}','a',this.value);updateProgress()">
+      </div>
+      <span class="match-team right">${b}</span>
+    </div>`;
+  }).join('');
+  updatePhaseTabs();
+}
+
+function setScore(k,side,val){
+  if(!scores[k])scores[k]={h:'',a:''};
+  scores[k][side]=val;
+  updatePhaseTabs();
+}
+
+function updatePhaseTabs(){
+  Object.keys(PHASES).forEach(phase=>{
+    const total=PHASES[phase].matches.length;
+    const filled=PHASES[phase].matches.filter(m=>{const k=m[0];return scores[k]&&scores[k].h!==''&&scores[k].a!=='';}).length;
+    const tab=document.getElementById('ptab-'+phase);
+    if(tab){
+      tab.classList.toggle('done',filled===total);
+      tab.textContent=filled===total?'✓ '+PHASES[phase].label:PHASES[phase].label+(filled>0?' '+filled+'/'+total:'');
+    }
+  });
+}
+
+function markCard(id,val){document.getElementById(id).classList.toggle('selected',!!val);}
+
+function updateProgress(){
+  const nombre=document.getElementById('p-nombre').value.trim();
+  const champ=document.getElementById('sel-champ').value;
+  const totalMatches=Object.values(PHASES).reduce((acc,p)=>acc+p.matches.length,0);
+  const filledScores=Object.values(PHASES).reduce((acc,p)=>acc+p.matches.filter(m=>{const k=m[0];return scores[k]&&scores[k].h!==''&&scores[k].a!=='';}).length,0);
+  let pct=0;
+  if(nombre)pct+=25;
+  if(champ)pct+=15;
+  pct+=Math.round((filledScores/totalMatches)*60);
+  pct=Math.min(pct,100);
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-pct').textContent=pct+'%';
+  document.getElementById('submit-pct').textContent=pct+'%';
+}
+
+async function submitPredictions(){
+  const nombre=document.getElementById('p-nombre').value.trim();
+  if(!nombre){toast('⚠️ Ingresa tu nombre');return;}
+  const champ=document.getElementById('sel-champ').value;
+  if(!champ){toast('⚠️ Elige al campeón');return;}
+
+  const btn=document.getElementById('btn-submit');
+  btn.disabled=true;btn.textContent='ENVIANDO...';
+
+  const pred={champ,goleador:document.getElementById('p-goleador').value.trim(),scores};
+
+  try{
+    const wa=document.getElementById('p-wa').value.trim();
+    const url=`${SHEETS_URL}?action=savePredictionDirect&nombre=${encodeURIComponent(nombre)}&wa=${encodeURIComponent(wa)}&data=${encodeURIComponent(JSON.stringify(pred))}`;
+    const res=await fetch(url);
+    const j=await res.json();
+    if(!j.ok)throw new Error(j.error||'Error');
+  }catch(e){
+    btn.disabled=false;btn.textContent='⚽ ENVIAR';
+    toast('⚠️ Error: '+e.message);return;
+  }
+
+  document.getElementById('main-form').style.display='none';
+  document.querySelector('.submit-area').style.display='none';
+  document.getElementById('success-name').textContent='¡Mucha suerte, '+nombre+'!';
+  document.getElementById('success-screen').classList.add('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+init();
+</script>
+</body>
+</html>
