@@ -159,10 +159,10 @@ select:focus{border-color:var(--gold)}
     <div class="section">
       <div class="section-hdr">
         <div class="section-num">3</div>
-        <div><div class="section-title">Marcadores</div><div class="section-sub">PREDICE CADA PARTIDO</div></div>
+        <div><div class="section-title">Marcadores — Ronda de 16</div><div class="section-sub">PREDICE LOS 16 PARTIDOS</div></div>
       </div>
-      <div class="alert-gold">💡 Ingresa el marcador que predices. Si hay empate en 90 min y va a penales, igual pon el marcador del tiempo reglamentario.</div>
-      <div class="phase-tabs" id="phase-tabs"></div>
+      <div class="alert-gold">💡 Ingresa el marcador que predices para cada partido. Si hay empate en 90 min y va a penales, pon el marcador al final de los 90 minutos.</div>
+      
       <div class="card" id="matches-body"></div>
     </div>
   </div>
@@ -244,35 +244,6 @@ const PHASES = {
       ['R16_15','Australia','Egipto'],
       ['R16_16','Portugal','Ghana'],
     ]
-  },
-  'QF': {
-    label: 'Cuartos de Final',
-    matches: [
-      ['QF_1','Ganador R16_1','Ganador R16_2'],
-      ['QF_2','Ganador R16_3','Ganador R16_4'],
-      ['QF_3','Ganador R16_5','Ganador R16_6'],
-      ['QF_4','Ganador R16_7','Ganador R16_8'],
-      ['QF_5','Ganador R16_9','Ganador R16_10'],
-      ['QF_6','Ganador R16_11','Ganador R16_12'],
-      ['QF_7','Ganador R16_13','Ganador R16_14'],
-      ['QF_8','Ganador R16_15','Ganador R16_16'],
-    ]
-  },
-  'SF': {
-    label: 'Semifinales',
-    matches: [
-      ['SF_1','Ganador QF_1','Ganador QF_2'],
-      ['SF_2','Ganador QF_3','Ganador QF_4'],
-      ['SF_3','Ganador QF_5','Ganador QF_6'],
-      ['SF_4','Ganador QF_7','Ganador QF_8'],
-    ]
-  },
-  'FINAL': {
-    label: 'Final',
-    matches: [
-      ['TERCERO','Perdedor SF_1','Perdedor SF_2'],
-      ['FINAL','Ganador SF_1','Ganador SF_2'],
-    ]
   }
 };
 
@@ -310,9 +281,6 @@ function init(){
   const teamOpts=unique.map(t=>`<option value="${t}">${t}</option>`).join('');
   document.getElementById('sel-champ').innerHTML='<option value="">— Elige el campeón —</option>'+teamOpts;
 
-  // Phase tabs
-  const tabs=document.getElementById('phase-tabs');
-  tabs.innerHTML=Object.keys(PHASES).map(k=>`<button class="ptab${k==='R16'?' active':''}" id="ptab-${k}" onclick="switchPhase('${k}')">${PHASES[k].label}</button>`).join('');
   renderPhase('R16');
   if(!checkDeadline())setInterval(checkDeadline,1000);
 }
