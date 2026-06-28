@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>⚙️ Admin R16 — Real Coholicos 2026</title>
+<title>⚙️ Admin R16 — Mundial Familiar R16 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0d1117;--surface:#161b22;--surface2:#21262d;--border:#30363d;--green:#238636;--green-light:#2ea043;--green-glow:rgba(35,134,54,0.2);--gold:#e3b341;--gold-dim:#533d1a;--text:#e6edf3;--muted:#8b949e;--subtle:#484f58;--red:#da3633;--red-dim:#3d1f1e;--blue:#58a6ff;--radius:8px;--radius-lg:12px;}
@@ -84,7 +84,7 @@ input:focus,select:focus{border-color:var(--green-light)}
 <body>
 <div class="hdr">
   <div style="display:flex;align-items:center;gap:10px">
-    <div class="hdr-logo">⚙️ ADMIN R16</div>
+    <div class="hdr-logo">⚙️ ADMIN FAMILIAR R16</div>
     <span class="hdr-badge">ADMIN</span>
   </div>
   <div class="sheets-status"><div class="dot" id="conn-dot"></div><span id="conn-txt">Sin conectar</span></div>
@@ -120,7 +120,7 @@ input:focus,select:focus{border-color:var(--green-light)}
   <div class="card">
     <div class="card-title">⚙️ Configuración</div>
     <div class="frow">
-      <div><label>Nombre de la polla</label><input type="text" id="cfg-nombre" value="Real Coholicos R16 2026"></div>
+      <div><label>Nombre de la polla</label><input type="text" id="cfg-nombre" value="Mundial Familiar R16 2026"></div>
       <div><label>Tu nombre</label><input type="text" id="cfg-admin" placeholder="José"></div>
     </div>
     <div class="frow">
@@ -226,16 +226,7 @@ input:focus,select:focus{border-color:var(--green-light)}
 
 <script>
 const PHASES={
-  R16:{label:'Ronda de 16',matches:[
-    ['R16_1','Por definir','Por definir'],['R16_2','Por definir','Por definir'],
-    ['R16_3','Por definir','Por definir'],['R16_4','Por definir','Por definir'],
-    ['R16_5','Por definir','Por definir'],['R16_6','Por definir','Por definir'],
-    ['R16_7','Por definir','Por definir'],['R16_8','Por definir','Por definir'],
-    ['R16_9','Por definir','Por definir'],['R16_10','Por definir','Por definir'],
-    ['R16_11','Por definir','Por definir'],['R16_12','Por definir','Por definir'],
-    ['R16_13','Por definir','Por definir'],['R16_14','Por definir','Por definir'],
-    ['R16_15','Por definir','Por definir'],['R16_16','Por definir','Por definir'],
-  ]},
+  R16:{label:'Ronda de 16',matches:[['R16_1','Sudáfrica','Canadá'],['R16_2','Brasil','Japón'],['R16_3','Alemania','Paraguay'],['R16_4','Países Bajos','Marruecos'],['R16_5','Costa de Marfil','Noruega'],['R16_6','Francia','Suecia'],['R16_7','México','Ecuador'],['R16_8','Estados Unidos','Bosnia'],['R16_9','Bélgica','Senegal'],['R16_10','Inglaterra','Rep. D. Congo'],['R16_11','Colombia','Croacia'],['R16_12','España','Austria'],['R16_13','Suiza','Argelia'],['R16_14','Argentina','Cabo Verde'],['R16_15','Australia','Egipto'],['R16_16','Portugal','Ghana']]},
   QF:{label:'Cuartos',matches:[
     ['QF_1','Ganador R16_1','Ganador R16_2'],['QF_2','Ganador R16_3','Ganador R16_4'],
     ['QF_3','Ganador R16_5','Ganador R16_6'],['QF_4','Ganador R16_7','Ganador R16_8'],
@@ -254,7 +245,7 @@ const PHASES={
 const ALL_MATCHES=Object.values(PHASES).flatMap(p=>p.matches);
 const POINTS={exact:3,winner:1,champ:8,goleador:5};
 
-let CFG={nombre:'Real Coholicos R16 2026',admin:'',formLink:'',rankingLink:'',sheetsUrl:''};
+let CFG={nombre:'Mundial Familiar R16 2026',admin:'',formLink:'',rankingLink:'',sheetsUrl:''};
 let RESULTS={};
 let PARTICIPANTS=[];
 let PREDICTIONS={};
@@ -429,7 +420,7 @@ async function calcularRanking(){
 }
 
 function buildWAMessages(){
-  const nombre=CFG.nombre||'Real Coholicos R16 2026';
+  const nombre=CFG.nombre||'Mundial Familiar R16 2026';
   const admin=CFG.admin||'el administrador';
   const formLink=CFG.formLink||'[LINK DEL FORMULARIO]';
   const rankingLink=CFG.rankingLink||'[LINK DEL RANKING]';

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>⚽ Predicciones — Real Coholicos R16 2026</title>
+<title>⚽ Predicciones — Mundial Familiar R16 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700&family=Crimson+Pro:ital@1&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -92,8 +92,8 @@ select:focus{border-color:var(--gold)}
 
 <div class="hero">
   <span class="hero-trophy">🏆</span>
-  <div class="hero-title">REAL COHOLICOS 2026</div>
-  <div class="hero-sub">Polla de Eliminatorias — Ronda de 16 en adelante</div>
+  <div class="hero-title">MUNDIAL FAMILIAR R16 2026</div>
+  <div class="hero-sub">Fase Eliminatoria — Ronda de 16 en adelante</div>
   <div class="hero-line"></div>
   <div class="hero-badge">⚡ FASE ELIMINATORIA</div>
   <div class="deadline" id="countdown"></div>
@@ -180,45 +180,69 @@ select:focus{border-color:var(--gold)}
 <script>
 // ══════════════════════════════════════════════════════════
 // CONFIGURACIÓN — pega tu URL de Apps Script
-const SHEETS_URL = 'PEGA_TU_URL_AQUI';
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyTtlZuKvA37sNUwcTJ5BT48BoiVCnq0xkS6DH4BjT3c4T3QmyTcBlUP73eBXeGwJb2/exec';
 // FECHA LÍMITE — hora Ecuador (UTC-5)
-const DEADLINE = new Date('2026-07-01T05:00:00Z'); // 30 junio 23:59 Ecuador
+const DEADLINE = new Date('2026-06-28T19:00:00Z'); // 30 junio 23:59 Ecuador
 // ══════════════════════════════════════════════════════════
 
 // ══════════════════════════════════════════════════════════
 // EQUIPOS — Reemplaza cuando se conozcan los clasificados
 // ══════════════════════════════════════════════════════════
 const ALL_TEAMS = [
-  'Por definir','Por definir','Por definir','Por definir',
-  'Por definir','Por definir','Por definir','Por definir',
-  'Por definir','Por definir','Por definir','Por definir',
-  'Por definir','Por definir','Por definir','Por definir',
-  'Por definir','Por definir','Por definir','Por definir',
-  'Por definir','Por definir','Por definir','Por definir',
-  'Por definir','Por definir','Por definir','Por definir',
-  'Por definir','Por definir','Por definir','Por definir',
+  'Alemania',
+  'Argelia',
+  'Argentina',
+  'Australia',
+  'Austria',
+  'Bosnia',
+  'Brasil',
+  'Bélgica',
+  'Cabo Verde',
+  'Canadá',
+  'Colombia',
+  'Costa de Marfil',
+  'Croacia',
+  'Ecuador',
+  'Egipto',
+  'España',
+  'Estados Unidos',
+  'Francia',
+  'Ghana',
+  'Inglaterra',
+  'Japón',
+  'Marruecos',
+  'México',
+  'Noruega',
+  'Paraguay',
+  'Países Bajos',
+  'Portugal',
+  'Rep. D. Congo',
+  'Senegal',
+  'Sudáfrica',
+  'Suecia',
+  'Suiza'
 ];
 
 const PHASES = {
   'R16': {
     label: 'Ronda de 16',
     matches: [
-      ['R16_1','Por definir','Por definir'],
-      ['R16_2','Por definir','Por definir'],
-      ['R16_3','Por definir','Por definir'],
-      ['R16_4','Por definir','Por definir'],
-      ['R16_5','Por definir','Por definir'],
-      ['R16_6','Por definir','Por definir'],
-      ['R16_7','Por definir','Por definir'],
-      ['R16_8','Por definir','Por definir'],
-      ['R16_9','Por definir','Por definir'],
-      ['R16_10','Por definir','Por definir'],
-      ['R16_11','Por definir','Por definir'],
-      ['R16_12','Por definir','Por definir'],
-      ['R16_13','Por definir','Por definir'],
-      ['R16_14','Por definir','Por definir'],
-      ['R16_15','Por definir','Por definir'],
-      ['R16_16','Por definir','Por definir'],
+      ['R16_1','Sudáfrica','Canadá'],
+      ['R16_2','Brasil','Japón'],
+      ['R16_3','Alemania','Paraguay'],
+      ['R16_4','Países Bajos','Marruecos'],
+      ['R16_5','Costa de Marfil','Noruega'],
+      ['R16_6','Francia','Suecia'],
+      ['R16_7','México','Ecuador'],
+      ['R16_8','Estados Unidos','Bosnia'],
+      ['R16_9','Bélgica','Senegal'],
+      ['R16_10','Inglaterra','Rep. D. Congo'],
+      ['R16_11','Colombia','Croacia'],
+      ['R16_12','España','Austria'],
+      ['R16_13','Suiza','Argelia'],
+      ['R16_14','Argentina','Cabo Verde'],
+      ['R16_15','Australia','Egipto'],
+      ['R16_16','Portugal','Ghana'],
     ]
   },
   'QF': {
