@@ -233,8 +233,8 @@ select option{background:var(--surface2)}
         <label>Fase</label>
         <select id="fase-sel" onchange="loadFase()">
           <option value="grupos">Fase de grupos</option>
+          <option value="r16_elim">Ronda de 16 (Eliminatorias)</option>
           <option value="r32">Ronda de 32</option>
-          <option value="r16">Ronda de 16</option>
           <option value="qf">Cuartos de final</option>
           <option value="sf">Semifinales</option>
           <option value="final">Final</option>
@@ -560,9 +560,39 @@ async function addParticipanteManual(){
 
 // ═══ RESULTADOS ═════════════════════════════════════════════
 
+const R16_ELIM_MATCHES=[
+  ['R16_1','Sudáfrica','Canadá'],['R16_2','Brasil','Japón'],
+  ['R16_3','Alemania','Paraguay'],['R16_4','Países Bajos','Marruecos'],
+  ['R16_5','Costa de Marfil','Noruega'],['R16_6','Francia','Suecia'],
+  ['R16_7','México','Ecuador'],['R16_8','Estados Unidos','Bosnia'],
+  ['R16_9','Bélgica','Senegal'],['R16_10','Inglaterra','Rep. D. Congo'],
+  ['R16_11','Colombia','Ghana'],['R16_12','España','Austria'],
+  ['R16_13','Suiza','Argelia'],['R16_14','Argentina','Cabo Verde'],
+  ['R16_15','Australia','Egipto'],['R16_16','Portugal','Croacia'],
+];
+
 function loadFase(){
   const fase=document.getElementById('fase-sel').value;
   document.getElementById('grupo-wrap').style.display=fase==='grupos'?'block':'none';
+  if(fase==='r16_elim'){
+    let h='<div class="sdiv">Ronda de 16</div>';
+    R16_ELIM_MATCHES.forEach(m=>{
+      const k=m[0],a=m[1],b=m[2];
+      const r=RESULTS[k]||{h:'',a:''};
+      h+=`<div class="match-row">
+        <div class="match-teams">${a}<span class="match-vs">vs</span>${b}</div>
+        <div class="score-wrap">
+          <span style="font-size:11px;color:var(--muted);min-width:80px">${a.substring(0,12)}</span>
+          <input type="number" min="0" max="20" value="${r.h}" placeholder="—" onchange="setR('${k}','h',this.value)">
+          <span class="score-dash">–</span>
+          <input type="number" min="0" max="20" value="${r.a}" placeholder="—" onchange="setR('${k}','a',this.value)">
+          <span style="font-size:11px;color:var(--muted);min-width:80px;text-align:right">${b.substring(0,12)}</span>
+        </div>
+      </div>`;
+    });
+    document.getElementById('partidos-body').innerHTML=h;
+    return;
+  }
   if(fase==='grupos'){
     const gs=document.getElementById('grupo-sel');
     gs.innerHTML='<option value="">Todos</option>'+Object.keys(GROUPS).map(g=>`<option value="${g}">Grupo ${g}</option>`).join('');
