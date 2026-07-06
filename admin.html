@@ -234,6 +234,7 @@ select option{background:var(--surface2)}
         <select id="fase-sel" onchange="loadFase()">
           <option value="grupos">Fase de grupos</option>
           <option value="r16_elim">Ronda de 16 (Eliminatorias)</option>
+          <option value="qf_elim">Octavos de Final</option>
           <option value="r32">Ronda de 32</option>
           <option value="qf">Cuartos de final</option>
           <option value="sf">Semifinales</option>
@@ -571,9 +572,35 @@ const R16_ELIM_MATCHES=[
   ['R16_15','Australia','Egipto'],['R16_16','Portugal','Croacia'],
 ];
 
+const QF_ELIM_MATCHES=[
+  ['QF_1','Canadá','Marruecos'],['QF_2','Paraguay','Francia'],
+  ['QF_3','Brasil','Noruega'],['QF_4','México','Inglaterra'],
+  ['QF_5','Portugal','España'],['QF_6','Estados Unidos','Bélgica'],
+  ['QF_7','Argentina','Egipto'],['QF_8','Suiza','Colombia'],
+];
+
 function loadFase(){
   const fase=document.getElementById('fase-sel').value;
   document.getElementById('grupo-wrap').style.display=fase==='grupos'?'block':'none';
+  if(fase==='qf_elim'){
+    let h='<div class="sdiv">Octavos de Final</div>';
+    QF_ELIM_MATCHES.forEach(m=>{
+      const k=m[0],a=m[1],b=m[2];
+      const r=RESULTS[k]||{h:'',a:''};
+      h+=`<div class="match-row">
+        <div class="match-teams">${a}<span class="match-vs">vs</span>${b}</div>
+        <div class="score-wrap">
+          <span style="font-size:11px;color:var(--muted);min-width:80px">${a.substring(0,12)}</span>
+          <input type="number" min="0" max="20" value="${r.h}" placeholder="—" onchange="setR('${k}','h',this.value)">
+          <span class="score-dash">–</span>
+          <input type="number" min="0" max="20" value="${r.a}" placeholder="—" onchange="setR('${k}','a',this.value)">
+          <span style="font-size:11px;color:var(--muted);min-width:80px;text-align:right">${b.substring(0,12)}</span>
+        </div>
+      </div>`;
+    });
+    document.getElementById('partidos-body').innerHTML=h;
+    return;
+  }
   if(fase==='r16_elim'){
     let h='<div class="sdiv">Ronda de 16</div>';
     R16_ELIM_MATCHES.forEach(m=>{
