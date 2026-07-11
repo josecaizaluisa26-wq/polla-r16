@@ -755,7 +755,8 @@ async function calcularRanking(){
 function calcPts(pred){
   if(!pred)return 0;
   let pts=0;const p=PTS;
-  // Puntos fase de grupos
+
+  // Grupos
   Object.keys(GROUPS).forEach(g=>{
     getGMs(g).forEach(([a,b],i)=>{
       const k=`${g}_${i}`;
@@ -767,19 +768,15 @@ function calcPts(pred){
       else{const rw=rh>ra?'h':rh<ra?'a':'d';const pw=ph>pa?'h':ph<pa?'a':'d';if(rw===pw)pts+=p.winner;}
     });
   });
-  // Puntos Ronda de 16
-  const R16_MATCHES=[
-    ['R16_1','Sudáfrica','Canadá'],['R16_2','Brasil','Japón'],
-    ['R16_3','Alemania','Paraguay'],['R16_4','Países Bajos','Marruecos'],
-    ['R16_5','Costa de Marfil','Noruega'],['R16_6','Francia','Suecia'],
-    ['R16_7','México','Ecuador'],['R16_8','Estados Unidos','Bosnia'],
-    ['R16_9','Bélgica','Senegal'],['R16_10','Inglaterra','Rep. D. Congo'],
-    ['R16_11','Colombia','Ghana'],['R16_12','España','Austria'],
-    ['R16_13','Suiza','Argelia'],['R16_14','Argentina','Cabo Verde'],
-    ['R16_15','Australia','Egipto'],['R16_16','Portugal','Croacia'],
+
+  // Todos los partidos de eliminatorias (R16, Octavos, Cuartos)
+  const ELIM_KEYS=[
+    'R16_1','R16_2','R16_3','R16_4','R16_5','R16_6','R16_7','R16_8',
+    'R16_9','R16_10','R16_11','R16_12','R16_13','R16_14','R16_15','R16_16',
+    'QF_1','QF_2','QF_3','QF_4','QF_5','QF_6','QF_7','QF_8',
+    'SF_1','SF_2','SF_3','SF_4',
   ];
-  R16_MATCHES.forEach(m=>{
-    const k=m[0];
+  ELIM_KEYS.forEach(k=>{
     const r=RESULTS[k];const pd=pred.scores?pred.scores[k]:null;
     if(!r||r.h===''||r.a==='')return;
     if(!pd||pd.h===''||pd.a==='')return;
@@ -787,20 +784,21 @@ function calcPts(pred){
     if(rh===ph&&ra===pa)pts+=p.exact;
     else{const rw=rh>ra?'h':rh<ra?'a':'d';const pw=ph>pa?'h':ph<pa?'a':'d';if(rw===pw)pts+=p.winner;}
   });
+
+  // Campeón
   const f=RESULTS['final_0'];
   const champ=f&&f.h!==''&&f.a!==''?(+f.h>+f.a?f.tH:+f.a>+f.h?f.tA:null):null;
   if(champ&&pred.champ===champ)pts+=p.champ;
   if(f&&pred.finalist1&&[f.tH,f.tA].includes(pred.finalist1))pts+=p.finalist;
   ['sf_0','sf_1'].forEach(sk=>{const sf=RESULTS[sk];if(sf&&sf.tH&&sf.tA){if([sf.tH,sf.tA].includes(pred.semi1))pts+=p.semi;if([sf.tH,sf.tA].includes(pred.semi2))pts+=p.semi;}});
-  // Goleador: 5 puntos
+
+  // Goleador
   const gReal=(RESULTS['goleador']||'').trim().toLowerCase();
   const gPred=(pred.goleador||'').trim().toLowerCase();
   if(gReal&&gPred&&gReal===gPred)pts+=5;
+
   return pts;
 }
-
-// ═══ COMPARTIR ══════════════════════════════════════════════
-
 function buildWAMessages(){
   const nombre=CFG.nombre||'Polla Mundialista 2026';
   const admin=CFG.admin||'el administrador';
