@@ -236,6 +236,7 @@ select option{background:var(--surface2)}
           <option value="r16_elim">Ronda de 16 (Eliminatorias)</option>
           <option value="qf_elim">Octavos de Final</option>
           <option value="sf_elim">Cuartos de Final</option>
+          <option value="semi_elim">Semifinales</option>
           <option value="r32">Ronda de 32</option>
           <option value="qf">Cuartos de final</option>
           <option value="sf">Semifinales</option>
@@ -585,9 +586,39 @@ const SF_ELIM_MATCHES=[
   ['SF_3','Noruega','Inglaterra'],['SF_4','Argentina','Suiza'],
 ];
 
+const SEMI_ELIM_MATCHES=[
+  ['SEMI_1','Francia','España'],['SEMI_2','Inglaterra','Argentina'],
+];
+
 function loadFase(){
   const fase=document.getElementById('fase-sel').value;
   document.getElementById('grupo-wrap').style.display=fase==='grupos'?'block':'none';
+  if(fase==='semi_elim'){
+    let h='<div class="sdiv">Semifinales</div>';
+    SEMI_ELIM_MATCHES.forEach(m=>{
+      const k=m[0],a=m[1],b=m[2];
+      const r=RESULTS[k]||{h:'',a:''};
+      h+=`<div class="match-row">
+        <div class="match-teams">${a}<span class="match-vs">vs</span>${b}</div>
+        <div class="score-wrap">
+          <span style="font-size:11px;color:var(--muted);min-width:80px">${a.substring(0,12)}</span>
+          <input type="number" min="0" max="20" value="${r.h}" placeholder="—" onchange="setR('${k}','h',this.value)">
+          <span class="score-dash">–</span>
+          <input type="number" min="0" max="20" value="${r.a}" placeholder="—" onchange="setR('${k}','a',this.value)">
+          <span style="font-size:11px;color:var(--muted);min-width:80px;text-align:right">${b.substring(0,12)}</span>
+        </div>
+      </div>`;
+    });
+    // Finalistas
+    const fins=RESULTS['finalistas']||'';
+    h+=`<div style="margin-top:16px;padding:12px;background:var(--gold-dim);border:1px solid var(--gold);border-radius:var(--radius)">
+      <div style="font-size:12px;color:var(--gold);font-weight:700;margin-bottom:8px">FINALISTAS REALES (separa con coma)</div>
+      <input type="text" value="${fins}" placeholder="Ej: Francia,Argentina" onchange="RESULTS['finalistas']=this.value;saveLocal()" style="font-size:13px">
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">Escribe los 2 equipos que clasificaron a la Final</div>
+    </div>`;
+    document.getElementById('partidos-body').innerHTML=h;
+    return;
+  }
   if(fase==='sf_elim'){
     let h='<div class="sdiv">Cuartos de Final</div>';
     SF_ELIM_MATCHES.forEach(m=>{
@@ -775,6 +806,7 @@ function calcPts(pred){
     'R16_9','R16_10','R16_11','R16_12','R16_13','R16_14','R16_15','R16_16',
     'QF_1','QF_2','QF_3','QF_4','QF_5','QF_6','QF_7','QF_8',
     'SF_1','SF_2','SF_3','SF_4',
+    'SEMI_1','SEMI_2',
   ];
   ELIM_KEYS.forEach(k=>{
     const r=RESULTS[k];const pd=pred.scores?pred.scores[k]:null;
@@ -793,6 +825,12 @@ function calcPts(pred){
   ['sf_0','sf_1'].forEach(sk=>{const sf=RESULTS[sk];if(sf&&sf.tH&&sf.tA){if([sf.tH,sf.tA].includes(pred.semi1))pts+=p.semi;if([sf.tH,sf.tA].includes(pred.semi2))pts+=p.semi;}});
 
   // Goleador
+  // Finalistas (3 pts por cada uno acertado)
+  const finalistas=(RESULTS['finalistas']||'').split(',').map(f=>f.trim()).filter(f=>f);
+  if(finalistas.length>0){
+    if(pred.finalista1&&finalistas.includes(pred.finalista1.trim()))pts+=3;
+    if(pred.finalista2&&finalistas.includes(pred.finalista2.trim()))pts+=3;
+  }
   const gReal=(RESULTS['goleador']||'').trim().toLowerCase();
   const gPred=(pred.goleador||'').trim().toLowerCase();
   if(gReal&&gPred&&gReal===gPred)pts+=5;
