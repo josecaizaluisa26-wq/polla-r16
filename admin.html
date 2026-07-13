@@ -609,13 +609,25 @@ function loadFase(){
         </div>
       </div>`;
     });
-    // Finalistas
+    // Semifinalistas y Campeón
+    const semis=RESULTS['semifinalistas']||'';
     const fins=RESULTS['finalistas']||'';
-    h+=`<div style="margin-top:16px;padding:12px;background:var(--gold-dim);border:1px solid var(--gold);border-radius:var(--radius)">
-      <div style="font-size:12px;color:var(--gold);font-weight:700;margin-bottom:8px">FINALISTAS REALES (separa con coma)</div>
+    const campeon=RESULTS['campeon']||'';
+    h+=`<div style="margin-top:16px;padding:12px;background:var(--gold-dim);border:1px solid var(--gold);border-radius:var(--radius);margin-bottom:8px">
+      <div style="font-size:12px;color:var(--gold);font-weight:700;margin-bottom:8px">⭐ 4 SEMIFINALISTAS REALES (separa con coma) — 3 pts cada uno</div>
+      <input type="text" value="${semis}" placeholder="Ej: Francia,España,Argentina,Inglaterra" onchange="RESULTS['semifinalistas']=this.value;saveLocal()" style="font-size:13px">
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">Los 4 equipos semifinalistas</div>
+    </div>
+    <div style="padding:12px;background:var(--gold-dim);border:1px solid var(--gold);border-radius:var(--radius);margin-bottom:8px">
+      <div style="font-size:12px;color:var(--gold);font-weight:700;margin-bottom:8px">🏆 FINALISTAS REALES (separa con coma) — 3 pts cada uno</div>
       <input type="text" value="${fins}" placeholder="Ej: Francia,Argentina" onchange="RESULTS['finalistas']=this.value;saveLocal()" style="font-size:13px">
-      <div style="font-size:11px;color:var(--muted);margin-top:4px">Escribe los 2 equipos que clasificaron a la Final</div>
-    </div>`;
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">Los 2 equipos finalistas</div>
+    </div>
+    <div style="padding:12px;background:var(--gold-dim);border:1px solid var(--gold);border-radius:var(--radius)">
+      <div style="font-size:12px;color:var(--gold);font-weight:700;margin-bottom:8px">🏅 CAMPEÓN REAL — 8 pts</div>
+      <input type="text" value="${campeon}" placeholder="Ej: Argentina" onchange="RESULTS['campeon']=this.value;saveLocal()" style="font-size:13px">
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">El campeón del Mundial 2026</div>
+    </div>\`;
     document.getElementById('partidos-body').innerHTML=h;
     return;
   }
@@ -730,6 +742,9 @@ function setR(k,s,v){if(!RESULTS[k])RESULTS[k]={h:'',a:''};RESULTS[k][s]=v;saveL
 function setRT(k,f,v){if(!RESULTS[k])RESULTS[k]={h:'',a:''};RESULTS[k][f]=v;saveLocal();}
 
 async function saveResultados(){
+  // Ensure special fields are saved
+  const gInput=document.getElementById('goleador-real');
+  if(gInput&&gInput.value)RESULTS['goleador']=gInput.value;
   saveLocal();
   try{
     const r=await apiCall('saveResultados',{data:encodeURIComponent(JSON.stringify(RESULTS))});
